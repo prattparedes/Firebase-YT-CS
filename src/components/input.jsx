@@ -1,7 +1,7 @@
-function Input({ placeholder }) {
+function Input({ type, name, placeholder, emailSet }) {
     return (
         <>
-        <input placeholder={placeholder}></input>
+        <input name={name} placeholder={placeholder} onChange={emailSet}></input>
         </>
     )
 }

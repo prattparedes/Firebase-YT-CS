@@ -1,8 +1,8 @@
 import './btn.css'
 
-function Button() {
+function Button({ submit }) {
     return (
-        <button>Presiona aquí para invocar cuadrado</button>
+        <button onClick={submit}>Submit</button>
     )
 }
 
