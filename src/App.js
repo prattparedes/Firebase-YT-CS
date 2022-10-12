@@ -3,6 +3,7 @@ import "./App.css";
 import Input from "./components/Input";
 import InputPass from "./components/InputPass";
 import Button from "./components/Button";
+import Login from './components/Login'
 import React, { useState, useEffect } from "react";
 import app from "./firebaseConfig";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword} from "firebase/auth";
@@ -40,7 +41,7 @@ function App() {
   return (
     <>
       <h1>Authentication React-Firebase</h1>
-      <h2>REGISTER</h2>
+      <h2 style={{ marginTop: '12px '}}>REGISTER</h2>
       <Input placeholder={"Email"} emailSet={emailSet} />
       <InputPass placeholder={"Password"} passwordSet={passwordSet} />
       <br></br>
@@ -50,7 +51,8 @@ function App() {
         <h3>Registered Users</h3>
         email: {generalData.email}, password: {generalData.password}
       </div> */}
-            <h2>LOGIN</h2>
+      <h2 style={{ marginTop: '16px '}}>LOGIN</h2>
+      <Login />
     </>
   );
 }
