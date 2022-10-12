@@ -4,12 +4,18 @@ import Input from "./components/Input";
 import InputPass from "./components/InputPass";
 import Button from "./components/Button";
 import Login from './components/Login'
+import ButtonG from './components/ButtonGoogle'
+
 import React, { useState, useEffect } from "react";
 import app from "./firebaseConfig";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword} from "firebase/auth";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { GithubAuthProvider } from "firebase/auth";
+
 
 function App() {
   const auth = getAuth();
+  const provider = new GoogleAuthProvider();
 
   const [generalData, setGeneralData] = useState([]);
   const [email, setEmail] = useState("");
@@ -28,6 +34,7 @@ function App() {
     createUserWithEmailAndPassword(auth, email, password)
       .then((response) => {
         console.log(response.user);
+        alert('Registro exitoso')
       })
       .catch((err) => {
         alert(err.message);
@@ -49,6 +56,7 @@ function inputEmailLogIn(event) {
     signInWithEmailAndPassword(auth, emailLogIn, passLogIn)
     .then((response) => {
       console.log(response.user);
+      alert('Iniciaste Sesión')
     })
     .catch((err) => {
       alert(err.message);
@@ -58,6 +66,16 @@ function inputEmailLogIn(event) {
   useEffect(() => {
     console.log(generalData);
   }, [generalData]);
+
+  function googleLogIn() {
+    signInWithPopup(auth, provider)    
+    .then((result) => {
+      console.log(result)
+      alert('Iniciaste sesión')
+    }).catch((error) => {
+      console.log(error)
+    });
+  }
 
   return (
     <>
@@ -74,6 +92,8 @@ function inputEmailLogIn(event) {
       </div> */}
       <h2 style={{ marginTop: '16px '}}>LOGIN</h2>
       <Login login={LogIn} setEmail={inputEmailLogIn} setPass={inputPassLogIn}/>
+      <ButtonG googleLogIn={googleLogIn}/>
+      <a onClick={}></a>
     </>
   );
 }
