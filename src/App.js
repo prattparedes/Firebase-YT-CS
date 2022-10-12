@@ -5,7 +5,7 @@ import InputPass from "./components/InputPass";
 import Button from "./components/Button";
 import React, { useState, useEffect } from "react";
 import app from "./firebaseConfig";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword} from "firebase/auth";
 
 function App() {
   const auth = getAuth();
@@ -40,6 +40,7 @@ function App() {
   return (
     <>
       <h1>Authentication React-Firebase</h1>
+      <h2>REGISTER</h2>
       <Input placeholder={"Email"} emailSet={emailSet} />
       <InputPass placeholder={"Password"} passwordSet={passwordSet} />
       <br></br>
@@ -49,6 +50,7 @@ function App() {
         <h3>Registered Users</h3>
         email: {generalData.email}, password: {generalData.password}
       </div> */}
+            <h2>LOGIN</h2>
     </>
   );
 }
