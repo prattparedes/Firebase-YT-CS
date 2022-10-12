@@ -16,6 +16,7 @@ import { GithubAuthProvider } from "firebase/auth";
 function App() {
   const auth = getAuth();
   const provider = new GoogleAuthProvider();
+  const provider2 = new GithubAuthProvider();
 
   const [generalData, setGeneralData] = useState([]);
   const [email, setEmail] = useState("");
@@ -77,6 +78,16 @@ function inputEmailLogIn(event) {
     });
   }
 
+  function githubLogIn() {
+    signInWithPopup(auth, provider2)
+    .then((response) => {
+      console.log(response);
+      alert('Iniciaste con GitHub');
+    }).catch((err) => {
+      console.log(err)
+    })
+  }
+
   return (
     <>
       <h1>Authentication React-Firebase</h1>
@@ -93,7 +104,7 @@ function inputEmailLogIn(event) {
       <h2 style={{ marginTop: '16px '}}>LOGIN</h2>
       <Login login={LogIn} setEmail={inputEmailLogIn} setPass={inputPassLogIn}/>
       <ButtonG googleLogIn={googleLogIn}/>
-      <a onClick={}></a>
+      <a onClick={githubLogIn}><i className="fa-brands fa-github" style={{ marginTop:'16px', fontSize:'24px', cursor:'pointer' }}></i></a>
     </>
   );
 }
