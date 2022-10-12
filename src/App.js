@@ -34,6 +34,27 @@ function App() {
       });
   }
 
+  const [emailLogIn, setEmailLogIn] = useState('')
+  const [passLogIn, setPassLogIn] = useState('')
+
+function inputEmailLogIn(event) {
+  setEmailLogIn(event.target.value)
+  }
+
+  function inputPassLogIn(event) {
+    setPassLogIn(event.target.value)
+  }
+
+  function LogIn() {
+    signInWithEmailAndPassword(auth, emailLogIn, passLogIn)
+    .then((response) => {
+      console.log(response.user);
+    })
+    .catch((err) => {
+      alert(err.message);
+    });
+  }
+
   useEffect(() => {
     console.log(generalData);
   }, [generalData]);
@@ -52,7 +73,7 @@ function App() {
         email: {generalData.email}, password: {generalData.password}
       </div> */}
       <h2 style={{ marginTop: '16px '}}>LOGIN</h2>
-      <Login />
+      <Login login={LogIn} setEmail={inputEmailLogIn} setPass={inputPassLogIn}/>
     </>
   );
 }
