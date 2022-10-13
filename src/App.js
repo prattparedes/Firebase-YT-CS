@@ -209,7 +209,6 @@ function App() {
   }
 
   //REALTIME USER LIST
-  const [userList, setUserList] = useState([])
   function getUsersData() {
     // getDocs(collectionRef).then((data) => {
     //   console.log(
@@ -219,22 +218,36 @@ function App() {
     //   );
     // });
     onSnapshot(collectionRef, (data) => {
-      console.log(data.docs.map((item) => {
-        setUserList()
-        return item.data()
-      }))
-    })
+      console.log(
+        data.docs.map((item) => {
+          return item.data();
+        })
+      );
+    });
   }
 
   useEffect(() => {
     getUsersData();
-  }, [])
+  }, []);
 
-  // function userHTML() {
-  //   return (
-      
-  //   );
+  getDocs(collectionRef);
+
+  
+
+  // async function UserHTML() {
+  //   const userListRef = await getDocs(collectionRef);
+  //   const userList = userListRef.docs.map((data) => data.data());
+
+  //   const userListHTML = userList
+  //     .map((user) => {
+  //       return `<li style={{ fontSize:'20px', listStyleType:'none' }}>${user.email}</li>`;
+  //     })
+  //     .join("");
+  //   console.log(userListHTML);
+
+  //   return userListHTML;
   // }
+
 
   return (
     <>
@@ -282,7 +295,17 @@ function App() {
           Upload to Storage
         </button>
       </div>
-      <UsersList userHTML={userHTML}/>
+      <div
+        className="Users__List"
+        style={{
+          backgroundColor: "lightgray",
+          maxWidth: "600px",
+          margin: "0 auto",
+        }}
+      >
+        <h1 style={{ marginTop: "16px" }}>LISTA DE USUARIOS</h1>
+        {/* <ul style={{ marginTop: "8px" }}>{<UserHTML />}</ul> */}
+      </div>
     </>
   );
 }
