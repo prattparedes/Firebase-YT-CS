@@ -7,15 +7,19 @@ import Login from './components/Login'
 import ButtonG from './components/ButtonGoogle'
 
 import React, { useState, useEffect } from "react";
-import { app, database } from "./firebaseConfig";
+import { app, database, storage } from "./firebaseConfig";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword} from "firebase/auth";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { GithubAuthProvider } from "firebase/auth";
 
-import { collection, addDoc, getDocs, doc, updateDoc } from "firebase/firestore";
+import { collection, addDoc, getDocs, doc, updateDoc, deleteDoc } from "firebase/firestore";
+
+import { } from ''
 
 
 function App() {
+  // AUTHENTICATION SECTION
+  
   const auth = getAuth();
   const provider = new GoogleAuthProvider();
   const provider2 = new GithubAuthProvider();
@@ -68,7 +72,7 @@ function App() {
   
     useEffect(() => {
       console.log(generalData);
-    }, [generalData]);
+    }, []);
   
     function googleLogIn() {
       signInWithPopup(auth, provider)    
@@ -91,6 +95,7 @@ function App() {
     }
 
   // Section Firestore
+  const [actualID, setActualID] = useState('')
   const collectionRef = collection(database, 'users')
 
   function addData() {
@@ -115,11 +120,33 @@ function App() {
   }
 
   function updateData () {
-    const docToUpdate = doc()
-    console.log('data updated')
+    const docToUpdate = doc(database, 'users', actualID)
+    updateDoc(docToUpdate, {
+      email: email,
+      password: password
+    })
+    .then(() => {
+      alert('Data Updated')
+    }).catch((err) => {
+      alert(err.message)
+    })
   }
 
-  // Section Firestore
+  function deleteData() {
+    const docToDelete = doc(database, 'users', actualID)
+    deleteDoc(docToDelete)
+    .then((response) => {
+      console.log('data deleted')
+    }).catch((err) => {
+      console.log(err.message)
+    })
+  }
+
+  function inputID(event) {
+    setActualID(event.target.value)
+  }
+
+  //Firebase Storage
 
   return (
     <>
@@ -129,19 +156,17 @@ function App() {
       <InputPass placeholder={"Password"} passwordSet={passwordSet} />
       <br></br>
       <Button submit={Submit} />
-      {/* <div className="registeredUsers">
-        <br></br>
-        <h3>Registered Users</h3>
-        email: {generalData.email}, password: {generalData.password}
-      </div> */}
       <h2 style={{ marginTop: '16px '}}>LOGIN</h2>
       <Login login={LogIn} setEmail={inputEmailLogIn} setPass={inputPassLogIn}/>
       <ButtonG googleLogIn={googleLogIn}/>
       <a onClick={githubLogIn}><i className="fa-brands fa-github" style={{ marginTop:'16px', fontSize:'24px', cursor:'pointer' }}></i></a>
       <br />
+      <input placeholder="Enter doc ID" onChange={inputID} style={{ minWidth:'300px' }}/><br />
       <button onClick={addData}>ADD TO DATABASE</button>
       <button onClick={getData}>GET DATA FROM DB</button>
+      <br />
       <button onClick={updateData}>UPDATE DATA</button>
+      <button onClick={deleteData}>DELETE DATA</button>
     </>
   );
 }
