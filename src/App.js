@@ -27,6 +27,8 @@ import {
   deleteDoc,
   onSnapshot,
   getDoc,
+  query,
+  where
 } from "firebase/firestore";
 
 import {
@@ -209,26 +211,26 @@ function App() {
   }
 
   //REALTIME USER LIST
-  function getUsersData() {
-    // getDocs(collectionRef).then((data) => {
-    //   console.log(
-    //     data.docs.map((item) => {
-    //       return item.data();
-    //     })
-    //   );
-    // });
-    // // onSnapshot(collectionRef, (data) => {
-    // //   console.log(
-    // //     data.docs.map((item) => {
-    // //       return item.data();
-    // //     })
-    // //   );
-    // // });
-  }
+  // function getUsersData() {
+  //   // getDocs(collectionRef).then((data) => {
+  //   //   console.log(
+  //   //     data.docs.map((item) => {
+  //   //       return item.data();
+  //   //     })
+  //   //   );
+  //   // });
+  //   // // onSnapshot(collectionRef, (data) => {
+  //   // //   console.log(
+  //   // //     data.docs.map((item) => {
+  //   // //       return item.data();
+  //   // //     })
+  //   // //   );
+  //   // // });
+  // }
 
-  useEffect(() => {
-    getUsersData();
-  }, []);
+  // useEffect(() => {
+  //   getUsersData();
+  // }, []);
 
   getDocs(collectionRef);
 
@@ -251,6 +253,62 @@ function App() {
   onSnapshot(collectionRef, (data) => {
     UserHTML()
   })
+
+   /* FIRESTORE QUERYS */
+   const usersAgeRef = collection(database, "users__age");
+   const [name,setName] = useState('')
+   const [age,setAge] = useState(0)
+
+   function handleInputName(event) {
+    setName(event.target.value)
+   }
+
+   function handleInputAge(event) {
+    setAge(parseInt(event.target.value))
+   }
+   
+   function addData2() {
+    addDoc(usersAgeRef, {
+      name: name,
+      age: age,
+    })
+      .then(() => {
+        alert("Data añadida");
+      })
+      .catch((err) => {
+        alert(err.message);
+      });
+  }
+
+  const nameQuery = query(usersAgeRef, where("name", "!=", 'Mari'))
+  const ageQuery = query(usersAgeRef, where("age", "<", 20))
+
+  function getData2() {
+    onSnapshot(nameQuery, (data) => {
+      console.log(data.docs.map((item) => {
+        return item.data();
+      }))
+    })
+  }
+
+  function getData3() {
+    onSnapshot(ageQuery, (data) => {
+      console.log(data.docs.map((item) => {
+        return item.data();
+      }))
+    })
+  }
+
+  useEffect(() => {
+    getData2()
+  }, [])
+
+  useEffect(() => {
+    getData3()
+  }, [])
+  
+
+
 
   return (
     <>
@@ -309,6 +367,11 @@ function App() {
         <h1 style={{ marginTop: "16px" }}>LISTA DE USUARIOS</h1>
         <ul className="users__list" style={{ marginTop: "8px" }}>Loading...</ul>
       </div>
+
+      <h2 style={{ marginTop:'16px' }}>FireStore Querys (Users age)</h2>
+      <input onChange={handleInputName} placeholder="Enter Name" style={{ minWidth:'300px', marginTop:'8px'}}></input>
+      <input onChange={handleInputAge} placeholder="Age" style={{ maxWidth:'50px'}}></input> <br />
+      <button onClick={addData2} style={{ marginTop:'24px'}}>SUBMIT TO DB</button>
     </>
   );
 }
