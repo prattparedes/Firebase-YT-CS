@@ -89,9 +89,9 @@ function App() {
       });
   }
 
-  useEffect(() => {
-    console.log(generalData);
-  }, []);
+  // useEffect(() => {
+  //   console.log(generalData);
+  // }, []);
 
   function googleLogIn() {
     signInWithPopup(auth, provider)
@@ -217,13 +217,13 @@ function App() {
     //     })
     //   );
     // });
-    onSnapshot(collectionRef, (data) => {
-      console.log(
-        data.docs.map((item) => {
-          return item.data();
-        })
-      );
-    });
+    // // onSnapshot(collectionRef, (data) => {
+    // //   console.log(
+    // //     data.docs.map((item) => {
+    // //       return item.data();
+    // //     })
+    // //   );
+    // // });
   }
 
   useEffect(() => {
@@ -232,22 +232,25 @@ function App() {
 
   getDocs(collectionRef);
 
-  
+  async function UserHTML() {
+    const userListRef = await getDocs(collectionRef);
+    const userList = userListRef.docs.map((data) => data.data());
 
-  // async function UserHTML() {
-  //   const userListRef = await getDocs(collectionRef);
-  //   const userList = userListRef.docs.map((data) => data.data());
+    const userListHTML = userList
+      .map((user) => {
+        return `<li style="font-size: 20px; list-style-type: none">${user.email}</li>`;
+      })
+      .join("");
+    ;
+    const usersListEl = document.querySelector('.users__list')
+    usersListEl.innerHTML = userListHTML
 
-  //   const userListHTML = userList
-  //     .map((user) => {
-  //       return `<li style={{ fontSize:'20px', listStyleType:'none' }}>${user.email}</li>`;
-  //     })
-  //     .join("");
-  //   console.log(userListHTML);
+    return userListHTML;
+  }
 
-  //   return userListHTML;
-  // }
-
+  onSnapshot(collectionRef, (data) => {
+    UserHTML()
+  })
 
   return (
     <>
@@ -304,7 +307,7 @@ function App() {
         }}
       >
         <h1 style={{ marginTop: "16px" }}>LISTA DE USUARIOS</h1>
-        {/* <ul style={{ marginTop: "8px" }}>{<UserHTML />}</ul> */}
+        <ul className="users__list" style={{ marginTop: "8px" }}>Loading...</ul>
       </div>
     </>
   );
